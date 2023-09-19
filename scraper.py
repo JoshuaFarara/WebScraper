@@ -1,11 +1,12 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 import requests
 import io
 from PIL import Image
 import time
 
 # Set the path to chromedriver.exe
-PATH = "C:\\Users\\User\\Desktop\\WebScraper\\chromedriver.exe"
+PATH = "C:\\Users\\User\\Documents\\MyPythonScripts\\Drivers\\chromedriver.exe"
 
 # Create ChromeOptions and set any desired options
 chrome_options = webdriver.ChromeOptions()
@@ -27,8 +28,26 @@ def get_images_from_google(wd, delay, max_images):
     image_urls = set()
 
     while len(image_urls) < max_images: 
-        pass
+        scroll_down(wd)
 
+        # iPVvYb
+        thumbnails = wd.find_elements(By.CLASS_NAME, "iPVvYb")
+
+        for img in thumbnails[len(image_urls): max_images]:
+            try:
+                img.click()
+                time.sleep(delay)
+            except:
+                continue
+
+            # Du2c7e
+            images = wd.find_elements(By.CLASS_NAME, "Du2c7e")
+            for image in images:
+                if image.get_attribute('src') and 'http' in image.get_attribute('src'):
+                    image_urls.add(image.get_attribute('src'))
+                    print(f"Found {len(image_urls)} image!")
+    
+    return image_urls
 
 def download_image(download_path, url, file_name):
     try:
@@ -44,8 +63,8 @@ def download_image(download_path, url, file_name):
     except Exception as e:
         print('FAILED -', e)
 
-
     
 # download_image("", image_url, "test.jpg")
-get_images_from_google(wd, 2, 10)
+urls = get_images_from_google(wd, 5, 5)
+print(urls)
 wd.quit()

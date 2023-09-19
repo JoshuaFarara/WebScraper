@@ -1,0 +1,36 @@
+import bs4
+import requests
+from selenium import webdriver
+# import OS
+# import time
+
+# chromeDriverPath= r'C:\Users\User\Documents\MyPythonScripts\Drivers\chromedriver.exe'
+# driver = webdriver.Chrome(chromeDriverPath)
+
+# Create ChromeOptions and set any desired options
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--start-maximized")  # Optional: run Chrome in headless mode
+chrome_options.add_experimental_option("detach", True)
+
+# Initialize the webdriver with the options
+wd = webdriver.Chrome(options=chrome_options)
+
+search_URL = "https://www.google.com/search?q=car&source=Inms&tbm=isch"
+wd.get(search_URL)
+
+a = input("Waiting for user input to start...")
+
+wd.execute_script("window.scrollTo(0, 0);")
+
+page_html = wd.page_source
+pageSoup = bs4.BeautifulSoup(page_html, 'html.parser')
+containers = pageSoup.findAll('div', {'class':"isv-r PNCib ViTmJb BUooTd"})
+
+print(len(containers))
+
+len_containers = len(containers)
+print("Found %s image containers"%(len_containers))
+
+# //*[@id="islrg"]/div[1]/div[3]
+
+wd.find_element(By.XPATH, "//*[@id="islrg"]/div[1]/div[3]")
