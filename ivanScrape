@@ -1,8 +1,10 @@
 import bs4
 import requests
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 # import OS
-# import time
+import time
 
 # chromeDriverPath= r'C:\Users\User\Documents\MyPythonScripts\Drivers\chromedriver.exe'
 # driver = webdriver.Chrome(chromeDriverPath)
@@ -14,7 +16,9 @@ chrome_options.add_experimental_option("detach", True)
 
 # Initialize the webdriver with the options
 wd = webdriver.Chrome(options=chrome_options)
+action = ActionChains(wd) # create action chain object
 
+# URL to be searched, get the URL
 search_URL = "https://www.google.com/search?q=car&source=Inms&tbm=isch"
 wd.get(search_URL)
 
@@ -31,6 +35,48 @@ print(len(containers))
 len_containers = len(containers)
 print("Found %s image containers"%(len_containers))
 
+# //*[@id="islrg"]/div[1]/div[1]
 # //*[@id="islrg"]/div[1]/div[3]
 
-wd.find_element(By.XPATH, "//*[@id="islrg"]/div[1]/div[3]")
+# Get elemnt, in this case it is the thumbnail
+thumbnail = wd.find_element(By.XPATH, """//*[@id="islrg"]/div[1]/div[1]""")
+
+# use of actionchain object
+action.move_to_element(thumbnail).click().perform()
+print("Thumbnail clicked...")
+
+for i in range(1, len_containers+1):
+    if i % 25 == 0:
+        continue
+
+    xPath = wd.find_element(By.XPATH,"""//*[@id="islrg"]/div[1]/div[%s]"""%(i))
+
+    # Grabbing the URL of the small preview image
+    # previewImageXPath = wd.find_element(By.XPATH,"""/*[@id="islrg"]/div[1]/div[%s]/a[1]/div[1]/img"""%(i))
+    # previewImageURL = previewImageXPath.get_attribute("src") 
+
+    # click on the image container
+    action.move_to_element(xPath).click().perform()
+
+    # Starting a while True loop to wait until we have the URL inside the large image view is different from the preview one
+    # timeStarted = time.time()
+    # while True:
+
+    #     imageElement = wd.find_element(By.XPATH,
+    #      """//*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div[3]/div[1]/a/img[1]""")
+    #     imageURL = imageElement.get_attribute("src")
+
+    #     print("Waiting for the full res image")
+    #     if imageURL != previewImageURL:
+    #         # print()
+    #         print("Full res URL: ", imageURL)
+    #         break
+        
+    #     else:
+    #         # making a timeout if the full res img can't be loaded
+    #         currentTime = time.time()
+
+    #         if currentTime - timeStarted > 10:
+    #             print("Timeout! will download lower resolutionm image and move onto the next one")
+    #             break
+
