@@ -67,7 +67,8 @@ for num, thumbnail in enumerate(containers, start=1):
     # if num % 25 == 0:
     #     continue
     try:
-
+        # xPath = wd.find_element(By.XPATH,"""//*[@id="islrg"]/div[1]/div[%s]"""%(i))
+        # action.move_to_element(xPath).click().perform()
         thumbPath = """//*[@id="islrg"]/div[1]/div[1]"""
         # Get element, in this case it is the thumbnail
         nail = wd.find_element(By.XPATH, thumbPath)
