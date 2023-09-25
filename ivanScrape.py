@@ -37,6 +37,8 @@ action = ActionChains(wd) # create action chain object
 search_URL = "https://www.google.com/search?q=car&source=Inms&tbm=isch"
 wd.get(search_URL)
 
+# add an auttomatic scroll to bottom feature using scrollto(), time.sleep()
+
 a = input("Waiting for user input to start...")
 
 wd.execute_script("window.scrollTo(0, 0);")
@@ -44,73 +46,61 @@ wd.execute_script("window.scrollTo(0, 0);")
 page_html = wd.page_source
 pageSoup = bs4.BeautifulSoup(page_html, 'html.parser')
 containers = pageSoup.findAll('div', {'class':"isv-r PNCib ViTmJb BUooTd"})
+# thumbnail_elements = []
+# for container in containers:
+#     thumbnail = container.find('div')
+#     if thumbnail:
+#         thumbnail_elements.append(thumbnail)
 
 print(len(containers))
+# print(len(thumbnail_elements))
+# print(thumbnail_elements)
 
-len_containers = len(containers)
-print("Found %s image containers"%(len_containers))
-
-# //*[@id="islrg"]/div[1]/div[1]
-# //*[@id="islrg"]/div[1]/div[3]
-thumbPath = """//*[@id="islrg"]/div[1]/div[1]"""
-# Get element, in this case it is the thumbnail
-thumbnail = wd.find_element(By.XPATH, thumbPath)
-# use of actionchain object
-action.move_to_element(thumbnail).click().perform()
-print("Thumbnail clicked...")
-
-for i in range(1, len_containers+1):
-    if i % 25 == 0:
-        continue
-
-    xPath = wd.find_element(By.XPATH,"""//*[@id="islrg"]/div[1]/div[%s]"""%(i))
-
-    # Grabbing the URL of the small preview image
-    previewImageXPath = """//*[@id="islrg"]/div[1]/div[%s]/a[1]/div[1]/img"""%(i)
-    previewImageElement = wd.find_element(By.XPATH, previewImageXPath)
-    previewImageURL = previewImageElement.get_attribute("src") 
-
-    # click on the image container
-    action.move_to_element(xPath).click().perform()
-
-    # Starting a while True loop to wait until we have the URL inside the large image view is different from the preview one
-    # timeStarted = time.time()
-    # while True:
-    #     # timeout_values = [10, 15, 20, 25]  # Adjust the timeout values as needed
-
-    #     # for timeout in timeout_values:
-    #     #     # Start a timer
-    #     #     start_time = time.time()
-
-    #     fullResPath = """//*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div[3]/div[1]/a/img[1]"""
-    #     wait = WebDriverWait(wd, 5) # # Wait for the full-resolution image element to become available
-    #     imageElement = wait.until(EC.presence_of_element_located((By.XPATH, fullResPath))) # wd.find_element
-    #     # //*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div[3]/div[1]/a/img[1]
-    #     # //*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div[3]/div[1]/a/img[2]
-    #     # //*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div[3]
-    #     # end_time = time.time()
-    #     # wait_time = end_time - start_time
-    #     # print(f"Timeout: {timeout} seconds | Wait time: {wait_time} seconds")
-    #     imageURL = imageElement.get_attribute("src")
-    #     print("Full res URL: ", imageURL)
+# len_containers = len(containers)
+# print("Found %s image containers"%(len_containers))
 
 
-        # print("Waiting for the full res image")
-        # if imageURL != previewImageURL:
-        #     # print()
-        #     print("Full res URL: ", imageURL)
-        #     break
-        # else:
-        #     # making a timeout if the full res img can't be loaded
-        #     currentTime = time.time()
+# for i in range(1, len_containers+1):
+#     if i % 25 == 0:
+#         continue
+for num, thumbnail in enumerate(containers, start=1):
+    # if num % 25 == 0:
+    #     continue
+    try:
 
-        #     if currentTime - timeStarted > 10:
-        #         print("Timeout! will download lower resolutionm image and move onto the next one")
-        #         break
-        
-        # #download image
-        # try:
-        #     download_image(imageURL, folder_name, i)
-        #     print("Downloaded element s%s out of total. URL: %s" % (i, len_containers))
-        # except:
-        #     print("Couldn't download image %s, continuing downloading the next image. ")
+        thumbPath = """//*[@id="islrg"]/div[1]/div[1]"""
+        # Get element, in this case it is the thumbnail
+        nail = wd.find_element(By.XPATH, thumbPath)
+        # use of actionchain object
+        action.move_to_element(nail).click().perform()
+        # print("Thumbnail clicked...")
+         # Click on the current thumbnail
+        # action.move_to_element(thumbnail).click().perform()
+        print(f"Thumbnail {num} clicked...")
+
+        time.sleep(2)
+
+        fullResPath = """//*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div[3]/div[1]/a/img[1]"""
+        # fullResolutionImage = '//img[@class="n3VNCb n3VNCb"]'
+        fullResElement = wd.find_element(By.XPATH, fullResPath) # wd.find_element
+        # fullResElement = wd.find_element(By.XPATH, fullResolutionImage) # wd.find_element
+        fullResImage = fullResElement.get_attribute("src")
+      
+        print("Full res URL: ", fullResImage)
+
+        # thumbPath = """//*[@id="islrg"]/div[1]/div[1]"""
+        # # Get element, in this case it is the thumbnail
+        # thumbnail = wd.find_element(By.XPATH, thumbPath)
+        # # use of actionchain object
+        # action.move_to_element(thumbnail).click().perform()
+        # print("Thumbnail clicked...")
+        # Close the full-resolution image view by clicking on the X button
+        # close_button = wd.find_element(By.XPATH, '//*[@id="Sva75c"]/div[2]/div[2]/div[3]/span[1]/div[1]/span')
+        # action.move_to_element(close_button).click().perform()
+        action.move_to_element(nail).click().perform()
+
+
+    except Exception as e:
+        print(f'Error: {str(a)}')
+
+wd.quit()
