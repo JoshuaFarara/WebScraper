@@ -57,9 +57,7 @@ for num, thumbnail in enumerate(containers, start=1):
         nail = wd.find_element(By.XPATH, thumbPath)
         # use of actionchain object
         action.move_to_element(nail).click().perform()
-        # print("Thumbnail clicked...")
-         # Click on the current thumbnail
-        # action.move_to_element(thumbnail).click().perform()
+        # Click on the current thumbnail
         print(f"Thumbnail {num} clicked...")
 
         time.sleep(2)
