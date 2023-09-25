@@ -64,12 +64,12 @@ print(len(containers))
 #     if i % 25 == 0:
 #         continue
 for num, thumbnail in enumerate(containers, start=1):
-    # if num % 25 == 0:
-    #     continue
+    if num % 25 == 0:
+        continue
     try:
         # xPath = wd.find_element(By.XPATH,"""//*[@id="islrg"]/div[1]/div[%s]"""%(i))
         # action.move_to_element(xPath).click().perform()
-        thumbPath = """//*[@id="islrg"]/div[1]/div[1]"""
+        thumbPath = """//*[@id="islrg"]/div[1]/div[%s]""" %(num)
         # Get element, in this case it is the thumbnail
         nail = wd.find_element(By.XPATH, thumbPath)
         # use of actionchain object
@@ -98,7 +98,7 @@ for num, thumbnail in enumerate(containers, start=1):
         # Close the full-resolution image view by clicking on the X button
         # close_button = wd.find_element(By.XPATH, '//*[@id="Sva75c"]/div[2]/div[2]/div[3]/span[1]/div[1]/span')
         # action.move_to_element(close_button).click().perform()
-        action.move_to_element(nail).click().perform()
+        # action.move_to_element(nail).click().perform()
 
 
     except Exception as e:
